@@ -21,6 +21,6 @@ public class UpdateCategoryRequestDTO {
 
     @NotNull(message = FIELD_DESCRIPTION_NULL_MESSAGE)
     @NotEmpty(message = FIELD_DESCRIPTION_EMPTY_MESSAGE)
-    @Size(max = 90, message = FIELD_DESCRIPTION_LENGTH_MESSAGE)
+    @Size(max = 90, message = FIELD_DESCRIPTION_LENGTH_90_MESSAGE)
     private String description;
 }

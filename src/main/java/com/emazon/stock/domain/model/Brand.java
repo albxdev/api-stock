@@ -2,23 +2,23 @@ package com.emazon.stock.domain.model;
 
 import com.emazon.stock.domain.exception.*;
 
-public class Category {
+public class Brand {
 
     private Long id;
     private String name;
     private String description;
 
     // Constructor sin parámetros
-    public Category() {
+    public Brand() {
     }
 
-    // Constructor que inicializa la categoría y valida los campos
-    public Category(String name, String description) {
+    // Constructor que inicializa la marca y valida los campos
+    public Brand(String name, String description) {
         setName(name);
         setDescription(description);
     }
 
-    // Método para validar todos los campos de la categoría
+    // Método para validar todos los campos de la marca
     public void validate() {
         validateName(this.name);
         validateDescription(this.description);
@@ -81,8 +81,8 @@ public class Category {
         if (description.trim().isEmpty()) {
             throw new DescriptionCannotBeEmptyException();
         }
-        if (description.length() > 90) {
-            throw new DescriptionLength90ExceededException();
+        if (description.length() > 120) {
+            throw new DescriptionLength120ExceededException();
         }
     }
 }

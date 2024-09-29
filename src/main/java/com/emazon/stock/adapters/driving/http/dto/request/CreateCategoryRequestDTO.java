@@ -21,6 +21,6 @@
 
         @NotNull(message = DomainConstants.FIELD_DESCRIPTION_NULL_MESSAGE)
         @NotEmpty(message = DomainConstants.FIELD_DESCRIPTION_EMPTY_MESSAGE)
-        @Size(max = 90, message = DomainConstants.FIELD_DESCRIPTION_LENGTH_MESSAGE)
+        @Size(max = 90, message = DomainConstants.FIELD_DESCRIPTION_LENGTH_90_MESSAGE)
         private String description;
     }

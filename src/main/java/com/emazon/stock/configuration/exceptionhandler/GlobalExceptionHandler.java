@@ -22,8 +22,23 @@ public class GlobalExceptionHandler {
         HttpStatus status = HttpStatus.BAD_REQUEST; // Valor por defecto
         String errorMessage = ex.getMessage();
 
-        if (ex instanceof CategoryUnauthorizedAccessException || ex instanceof BrandUnauthorizedAccessException) {
+        // Manejo de Unauthorized
+        if (ex instanceof CategoryUnauthorizedAccessException ||
+                ex instanceof BrandUnauthorizedAccessException ||
+                ex instanceof ArticleUnauthorizedAccessException) {
             status = HttpStatus.UNAUTHORIZED;
+        }
+        // Manejo de NotFound
+        else if (ex instanceof CategoryNotFoundException ||
+                ex instanceof BrandNotFoundException ||
+                ex instanceof ArticleNotFoundException) {
+            status = HttpStatus.NOT_FOUND;
+        }
+        // Manejo de BadRequest (Datos inválidos)
+        else if (ex instanceof DescriptionCannotBeNullException ||
+                ex instanceof IdCannotBeNegativeOrZeroException ||
+                ex instanceof NameCannotBeEmptyException) {
+            status = HttpStatus.BAD_REQUEST;
         }
 
         ExceptionResponse response = new ExceptionResponse(
@@ -38,34 +53,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, status);
     }
 
-    @ExceptionHandler(IdCannotBeNegativeOrZeroException.class)
-    public ResponseEntity<ExceptionResponse> handleIdCannotBeNegativeOrZeroException(IdCannotBeNegativeOrZeroException ex, WebRequest request) {
-        ExceptionResponse response = new ExceptionResponse(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                "Bad Request",
-                ex.getMessage(),
-                request.getDescription(false).substring(4),
-                null
-        );
-
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(DescriptionCannotBeNullException.class)
-    public ResponseEntity<ExceptionResponse> handleDescriptionCannotBeNullException(DescriptionCannotBeNullException ex, WebRequest request) {
-        ExceptionResponse response = new ExceptionResponse(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                "Bad Request",
-                ex.getMessage(),
-                request.getDescription(false).substring(4),
-                null
-        );
-
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
+    // Manejo de validaciones de campos (ej: anotaciones @Valid en los DTO)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleValidationExceptions(MethodArgumentNotValidException ex, WebRequest request) {
         Map<String, String> fieldErrors = new HashMap<>();
@@ -84,5 +72,19 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // Manejo global de excepciones no capturadas explícitamente
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionResponse> handleGlobalException(Exception ex, WebRequest request) {
+        ExceptionResponse response = new ExceptionResponse(
+                LocalDateTime.now(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Internal Server Error",
+                ex.getMessage(),
+                request.getDescription(false).substring(4),
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

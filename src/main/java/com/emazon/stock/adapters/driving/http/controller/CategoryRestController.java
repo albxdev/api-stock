@@ -1,6 +1,6 @@
 package com.emazon.stock.adapters.driving.http.controller;
 
-import com.emazon.stock.adapters.driving.http.adapter.Adapter;
+import com.emazon.stock.adapters.driving.http.adapter.CategoryHttpAdapter;
 import com.emazon.stock.adapters.driving.http.base.BaseController;
 import com.emazon.stock.adapters.driving.http.dto.request.CreateCategoryRequestDTO;
 import com.emazon.stock.adapters.driving.http.dto.request.UpdateCategoryRequestDTO;
@@ -24,7 +24,7 @@ public class CategoryRestController extends BaseController {
 
 
 
-    private final Adapter adapter;
+    private final CategoryHttpAdapter categoryHttpAdapter;
 
     @PostMapping
     public ResponseEntity<CreateCategoryResponseDTO> createCategory(
@@ -34,13 +34,13 @@ public class CategoryRestController extends BaseController {
         if (!isAuthorized(headers)) {
             throw new CategoryUnauthorizedAccessException();
         }
-        CreateCategoryResponseDTO responseDTO = adapter.createCategory(requestDTO);
+        CreateCategoryResponseDTO responseDTO = categoryHttpAdapter.createCategory(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UpdateCategoryResponseDTO> getCategoryById(@PathVariable Long id) {
-        UpdateCategoryResponseDTO response = adapter.getCategory(id);
+        UpdateCategoryResponseDTO response = categoryHttpAdapter.getCategory(id);
         return ResponseEntity.ok(response);
     }
 
@@ -51,19 +51,19 @@ public class CategoryRestController extends BaseController {
             @RequestParam(required = false, defaultValue = "false") Boolean sortByName,
             @RequestParam(required = false, defaultValue = "true") Boolean asc) {
 
-        List<CreateCategoryResponseDTO> response = adapter.listCategories(page, size, sortByName, asc);
+        List<CreateCategoryResponseDTO> response = categoryHttpAdapter.listCategories(page, size, sortByName, asc);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UpdateCategoryResponseDTO> updateCategoryById(@PathVariable Long id, @RequestBody @Valid UpdateCategoryRequestDTO request) {
-        UpdateCategoryResponseDTO response = adapter.updateCategory(id, request);
+        UpdateCategoryResponseDTO response = categoryHttpAdapter.updateCategory(id, request);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategoryById(@PathVariable Long id) {
-        adapter.deleteCategory(id);
+        categoryHttpAdapter.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }
 }

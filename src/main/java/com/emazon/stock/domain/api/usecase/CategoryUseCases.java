@@ -69,5 +69,4 @@ public class CategoryUseCases implements ICategoryServicePort {
         category.setId(id);
         categoryPersistencePort.updateCategoryById(id, category);
     }
-
 }

@@ -3,6 +3,7 @@ package com.emazon.stock.domain.spi;
 import com.emazon.stock.domain.exception.CategoryNotFoundException; // Asegúrate de que la importación esté presente
 import com.emazon.stock.domain.model.Category;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Interface que define los métodos para la persistencia de categorías.
@@ -59,6 +60,9 @@ public interface ICategoryPersistencePort {
      * @throws IllegalArgumentException si el ID es negativo o cero.
      * @throws CategoryNotFoundException si no se encuentra una categoría con el ID proporcionado.
      */
+
+    Optional<Category> findById(Long id); // In ICategoryPersistencePort
+
     Category getCategoryById(Long id);
 
     /**

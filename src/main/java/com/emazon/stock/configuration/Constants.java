@@ -10,7 +10,7 @@ public class Constants {
     // Mensajes de error para artículos
     public static final String ARTICLE_NOT_FOUND_MESSAGE = "The article with ID '%d' does not exist.";
     public static final String ARTICLE_ALREADY_EXISTS_MESSAGE = "The article with ID '%d' already exists.";
-    public static final String ARTICLE_INVALID_DATA_MESSAGE = "Invalid data provided for the article.";
+    public static final String ARTICLE_UNAUTHORIZED_ACCESS_MESSAGE = "Unauthorized access to the article.";
 
     // Mensajes de error para categorías
     public static final String CATEGORY_NOT_FOUND_MESSAGE = "The category with ID '%d' does not exist.";

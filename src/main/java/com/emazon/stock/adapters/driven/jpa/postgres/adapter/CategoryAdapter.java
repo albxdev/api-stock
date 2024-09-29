@@ -3,7 +3,7 @@ package com.emazon.stock.adapters.driven.jpa.postgres.adapter;
 import com.emazon.stock.adapters.driven.jpa.postgres.entity.CategoryEntity;
 import com.emazon.stock.adapters.driven.jpa.postgres.exception.CategoryAlreadyExistsException;
 import com.emazon.stock.adapters.driven.jpa.postgres.exception.CategoryNotFoundException;
-import com.emazon.stock.adapters.driven.jpa.postgres.exception.NoDataFoundException;
+import com.emazon.stock.adapters.driven.jpa.postgres.exception.CategoryNoDataFoundException;
 import com.emazon.stock.adapters.driven.jpa.postgres.mapper.ICategoryEntityMapper;
 import com.emazon.stock.adapters.driven.jpa.postgres.repository.ICategoryRepository;
 import com.emazon.stock.domain.model.Category;
@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class CategoryAdapter implements ICategoryPersistencePort {
@@ -54,7 +55,7 @@ public class CategoryAdapter implements ICategoryPersistencePort {
         }
 
         if (categories.isEmpty()) {
-            throw new NoDataFoundException();
+            throw new CategoryNoDataFoundException();
         }
 
         return categoryEntityMapper.toModelList(categories);
@@ -80,15 +81,18 @@ public class CategoryAdapter implements ICategoryPersistencePort {
 
     @Override
     public void updateCategoryById(Long id, Category category) {
-        if (!categoryRepository.existsById(id)) {
-            throw new CategoryNotFoundException(id.toString());
-        }
-
         CategoryEntity existingCategoryEntity = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(id.toString()));
-
         existingCategoryEntity.setName(category.getName());
         existingCategoryEntity.setDescription(category.getDescription());
         categoryRepository.save(existingCategoryEntity);
     }
+
+    @Override
+    public Optional<Category> findById(Long id) {
+        return categoryRepository.findById(id)
+                .map(categoryEntityMapper::toModel);
+    }
+
+
 }

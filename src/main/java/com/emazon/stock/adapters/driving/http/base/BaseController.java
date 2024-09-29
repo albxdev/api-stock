@@ -10,7 +10,7 @@ public class BaseController {
     protected boolean isAuthorized(HttpHeaders headers) {
         String authHeader = headers.getFirst(HttpHeaders.AUTHORIZATION);
         if (authHeader == null || !authHeader.startsWith("Basic ")) {
-            return false; // El encabezado de autorización no está presente o no es del tipo esperado
+            return false;
         }
 
         // Extraer las credenciales codificadas en Base64
@@ -20,7 +20,7 @@ public class BaseController {
 
         // Validar que se hayan proporcionado ambos valores
         if (values.length != 2) {
-            return false; // Las credenciales no están en el formato esperado
+            return false;
         }
 
         String username = values[0];
